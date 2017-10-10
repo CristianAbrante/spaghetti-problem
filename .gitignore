@@ -1,0 +1,9 @@
+*~
+*swp
+*.log
+*.dvi 
+*.aux 
+*.blg 
+*.ps
+*.tgz
+*.tar.gz
