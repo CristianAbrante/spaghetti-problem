@@ -1,9 +1,10 @@
 *~
 *swp
 *.log
-*.dvi 
-*.aux 
-*.blg 
+*.dvi
+*.aux
+*.blg
 *.ps
 *.tgz
 *.tar.gz
+*.out

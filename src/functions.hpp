@@ -7,7 +7,7 @@
 
 // Returns the number found in the range [start, end]
 // Throws an invalid_argument exception if no number is found
-int parseInt( std::string& str, int start, int end );
+int parseInt( const std::string& str, int start, int end );
 
 // Removes every white space from a string
 void eraseWhiteSpaces( std::string& str );

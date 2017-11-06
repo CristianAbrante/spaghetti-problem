@@ -1,6 +1,6 @@
 #include "functions.hpp"
 
-int parseInt( std::string& str, int start, int end )
+int parseInt( const std::string& str, int start, int end )
 {
     int num = 0;
     bool thereIsNoNumber = true;
