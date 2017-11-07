@@ -49,4 +49,16 @@ void interpretOtherStatement( Node &n );
 // with no white spaces.
 void interpretStatement( Node &n );
 
+// Struct for convenience. It holds all the information of a line
+// (the node, the label if it exists, and a flag indicating if the label exists)
+struct Line {
+    Node n;
+    bool lineHasLabel;
+    int lineLabel;
+};
+
+// Given the line as raw string this function returns the Line struct
+// of that line
+Line parseLine( std::string& str );
+
 #endif

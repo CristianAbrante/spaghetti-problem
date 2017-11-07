@@ -83,3 +83,32 @@ void interpretStatement( Node &n )
             if( !interpretIfStatement(n) )
                 interpretOtherStatement(n);
 }
+
+
+Line parseLine( std::string& str )
+{
+    Line line = {};
+    try{
+        // "The first five positions in each line are reserved
+        // for an optional label, which is an integer"
+        line.lineLabel = parseInt( str, 0, 4 );
+        line.lineHasLabel = true;
+    }
+    // We reach the catch if there is no label in the line
+    catch( const std::invalid_argument& ia ){
+        line.lineLabel = -1;
+        line.lineHasLabel = false;
+    }
+
+    // Now we keep only the statement part of the string
+    // "Therefore, statements occupy positions 7 and beyond in each input line"
+    line.n.statement = str.substr( 6 );
+
+    // Erase white spaces from statement
+    eraseWhiteSpaces( line.n.statement );
+
+    // Finally, determine node type and label if it is a type of goto
+    interpretStatement( line.n );
+
+    return line;
+}
