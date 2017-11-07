@@ -37,12 +37,10 @@ struct Node{
 // the label from the statement.
 // The node has to have the statement string with the
 // white spaces already removed.
-/*************************************************
 bool interpretIfStatement( Node &n );
 bool interpretGotoStatement( Node &n );
 bool interpretStopStatement( Node &n );
 void interpretOtherStatement( Node &n );
-*************************************************/
 
 // This uses the 4 interpret "private" functions above to determine
 // the type and labelToNextNode of the node. It also removes the

@@ -106,6 +106,12 @@ void testParseInt()
             int n = parseInt( str, 0, str.size()-1 );
             if( n != 12 ) throw "Test 7";
         }
+        {
+            std::string str = "-123";
+            int n = parseInt( str, 0, str.size()-1 );
+            if( n != -123 ) throw "Test 8";
+        }
+
     }
     catch( const char *msg )
     {
@@ -119,10 +125,307 @@ void testParseInt()
 
 
 
+
+// Remember that this function assumes that the statement is free
+// from white spaces. Remember also that the problem promises us
+// that after "if(...)goto" comes the label
+void testInterpretIfStatement()
+{
+    try
+    {
+        {
+            Node n = {};
+            n.statement = "if()goto123";
+            interpretIfStatement(n);
+
+            if( n.statement != "if()goto"
+            ||  n.type != StatementType::conditional
+            ||  n.labelToNextNode != 123 )
+                throw "Test 1";
+        }
+
+        {
+            Node n = {};
+            n.statement = "if(i.lt.j)goto99999";
+            interpretIfStatement(n);
+
+            if( n.statement != "if(i.lt.j)goto"
+            ||  n.type != StatementType::conditional
+            ||  n.labelToNextNode != 99999 )
+                throw "Test 2";
+        }
+
+        {
+            Node n = {};
+            n.statement = "if(";
+
+            if( interpretIfStatement(n) )
+                throw "Test 3";
+        }
+
+        {
+            Node n = {};
+            n.statement = "goto1";
+
+            if( interpretIfStatement(n) )
+                throw "Test 4";
+        }
+
+        {
+            Node n = {};
+            n.statement = "stop";
+
+            if( interpretIfStatement(n) )
+                throw "Test 5";
+        }
+
+        {
+            Node n = {};
+            n.statement = "ifgoto123";
+
+            if( interpretIfStatement(n) )
+                throw "Test 6";
+        }
+    }
+    catch( const char *msg )
+    {
+        std::cerr << "\ntestInterpretIfStatement not working as expected. Failed " << msg << '\n';
+    }
+    catch( ... )
+    {
+        std::cerr << "\nUnknown error in testInterpretIfStatement\n";
+    }
+
+}
+
+// Remember that this function assumes that the statement is free
+// from white spaces. Remember also that the problem promises us
+// that after "goto" comes the label
+void testInterpretGotoStatement()
+{
+    try
+    {
+        {
+            Node n = {};
+            n.statement = "goto123";
+            interpretGotoStatement(n);
+
+            if( n.statement != "goto"
+            ||  n.type != StatementType::unconditional
+            ||  n.labelToNextNode != 123 )
+                throw "Test 1";
+        }
+
+        {
+            Node n = {};
+            n.statement = "goto99999";
+            interpretGotoStatement(n);
+
+            if( n.statement != "goto"
+            ||  n.type != StatementType::unconditional
+            ||  n.labelToNextNode != 99999 )
+                throw "Test 2";
+        }
+
+        {
+            Node n = {};
+            n.statement = "if()goto999";
+
+            if( interpretGotoStatement(n) )
+                throw "Test 3";
+        }
+
+        {
+            Node n = {};
+            n.statement = "asdgoto999";
+
+            if( interpretGotoStatement(n) )
+                throw "Test 4";
+        }
+    }
+    catch( const char *msg )
+    {
+        std::cerr << "\ninterpretGotoStatement not working as expected. Failed " << msg << '\n';
+    }
+    catch( ... )
+    {
+        std::cerr << "\nUnknown error in interpretGotoStatement\n";
+    }
+
+}
+
+
+void testInterpretStopStatement()
+{
+    try
+    {
+        {
+            Node n = {};
+            n.statement = "if(stop)goto1";
+
+            if( interpretStopStatement(n) )
+                throw "Test 1";
+        }
+
+        {
+            Node n = {};
+            n.statement = "stop";
+            interpretStopStatement(n);
+
+            if( n.statement != "stop"
+            ||  n.type != StatementType::stop
+            ||  n.labelToNextNode != -1 )
+                throw "Test 2";
+        }
+
+        {
+            Node n = {};
+            n.statement = "stops";
+
+            if( interpretStopStatement(n) )
+                throw "Test 3";
+        }
+
+        {
+            Node n = {};
+            n.statement = "sstop";
+
+            if( interpretStopStatement(n) )
+                throw "Test 4";
+        }
+    }
+    catch( const char *msg )
+    {
+        std::cerr << "\ninterpretStopStatement not working as expected. Failed " << msg << '\n';
+    }
+    catch( ... )
+    {
+        std::cerr << "\nUnknown error in interpretStopStatement\n";
+    }
+
+}
+
+
+
+void testInterpretOtherStatement()
+{
+    try
+    {
+        {
+            Node n = {};
+            n.statement = "asdasd";
+            interpretOtherStatement(n);
+
+            if( n.statement != "asdasd"
+            ||  n.type != StatementType::other
+            ||  n.labelToNextNode != -1 )
+                throw "Test 1";
+        }
+
+    }
+    catch( const char *msg )
+    {
+        std::cerr << "\ninterpretOtherStatement not working as expected. Failed " << msg << '\n';
+    }
+    catch( ... )
+    {
+        std::cerr << "\nUnknown error in interpretOtherStatement\n";
+    }
+
+}
+
+
+void testInterpretStatement()
+{
+    try
+    {
+        {
+            Node n = {};
+            n.statement = "asdasd";
+            interpretStatement(n);
+
+            if( n.statement != "asdasd"
+            ||  n.type != StatementType::other
+            ||  n.labelToNextNode != -1 )
+                throw "Test 1";
+        }
+
+        {
+            Node n = {};
+            n.statement = "stop";
+            interpretStatement(n);
+
+            if( n.statement != "stop"
+            ||  n.type != StatementType::stop
+            ||  n.labelToNextNode != -1 )
+                throw "Test 2";
+        }
+
+        {
+            Node n = {};
+            n.statement = "goto1";
+            interpretStatement(n);
+
+            if( n.statement != "goto"
+            ||  n.type != StatementType::unconditional
+            ||  n.labelToNextNode != 1 )
+                throw "Test 3";
+        }
+
+        {
+            Node n = {};
+            n.statement = "go_to1";
+            interpretStatement(n);
+
+            if( n.statement != "go_to1"
+            ||  n.type != StatementType::other
+            ||  n.labelToNextNode != -1 )
+                throw "Test 4";
+        }
+
+        {
+            Node n = {};
+            n.statement = "if()goto1";
+            interpretStatement(n);
+
+            if( n.statement != "if()goto"
+            ||  n.type != StatementType::conditional
+            ||  n.labelToNextNode != 1 )
+                throw "Test 5";
+        }
+
+        {
+            Node n = {};
+            n.statement = "if(goto)goto1";
+            interpretStatement(n);
+
+            if( n.statement != "if(goto)goto"
+            ||  n.type != StatementType::conditional
+            ||  n.labelToNextNode != 1 )
+                throw "Test 6";
+        }
+    }
+    catch( const char *msg )
+    {
+        std::cerr << "\ninterpretStatement not working as expected. Failed " << msg << '\n';
+    }
+    catch( ... )
+    {
+        std::cerr << "\nUnknown error in interpretStatement\n";
+    }
+
+}
+
+
 int main()
 {
     testEraseWhiteSpaces();
     testParseInt();
+    testInterpretIfStatement();
+    testInterpretGotoStatement();
+    testInterpretStopStatement();
+    testInterpretOtherStatement();
+    testInterpretStatement();
 
     std::cout << "\n\nFinished unit tests\n\n";
     return 0;
