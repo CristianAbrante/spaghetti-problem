@@ -102,9 +102,15 @@ void testParseInt()
             if( n != 1 ) throw "Test 6";
         }
         {
-            std::string str = " asdasdasd 12 3";
-            int n = parseInt( str, 0, str.size()-1 );
-            if( n != 12 ) throw "Test 7";
+            try{
+                // expected behaviour here is to
+                // throw an invalid_argument error
+                std::string str = " asdasdasd 12 3";
+                int n = parseInt( str, 0, str.size()-1 );
+                throw "Test 7";
+            }
+            catch( const std::invalid_argument& ia ){}
+            catch( ... ){ throw "Test 7"; }
         }
         {
             std::string str = "-123";
