@@ -37,6 +37,13 @@ int main (void) {
       }
       programs.push_back(current_program);
     }
+
+    if (comparePrograms(programs[0], programs[1])) {
+      std::cout << "The programs are equivalent." << '\n';
+    } else {
+      std::cout << "The programs are not equivalent." << '\n';
+    }
+
   }
 
   return 0;
